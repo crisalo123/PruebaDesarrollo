@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Pagination } from './ui/pagination'
 import { Card } from './ui/card'
 import { Button } from './ui/button'
-import type { Product } from '@/api/products'
+import {  type Product } from '@/api/products'
 import { useNavigate } from 'react-router-dom'
 import { useProductContext } from '@/contex/productContext'
+import { ModalPutProduct } from './ui/modalPutProduct'
 
 
 export interface ShowProductstype {
@@ -18,17 +19,29 @@ export interface ShowProductstype {
 }
 
 export const ShowProducts:React.FC<ShowProductstype> = ({setCurrentPage, currentProducts, currentPage, totalPages, islocations}) => {
+      const [isOpen, setIsOpen] = useState(false);
+      const [numberId, setNumberId] = useState<number>(0)
+      const [editedProduct, setEditedProduct] = useState<Partial<Product>>({});
       const navigate = useNavigate();
       const {  setProductNotificacion} = useProductContext();
-
+     
+      const filterModal = currentProducts.filter((product) => product.id === numberId)
      const handleViewDetails = (id: number) => {
-        navigate(`/home/${id}`);
+      if(islocations){
+        setNumberId(id)
+           setIsOpen(true)
+      }else{
+         navigate(`/home/${id}`);
+      }
+       
     }
     const handleDeleteProduct = (id:number) => {
     setProductNotificacion(prev => 
         prev.filter(product => product.id !== id)
     )
     }
+
+ 
 
   return (
     <>  
@@ -48,7 +61,12 @@ export const ShowProducts:React.FC<ShowProductstype> = ({setCurrentPage, current
               <p className="text-gray-800 font-bold">${product.price}</p>
             </div>
             <div className="p-2  ">
-              <Button onClick={() => handleViewDetails(product.id)} className="bg-blue-500 w-32 hover:bg-blue-600 text-white">{islocations ? 'Editar' : 'Ver +'}</Button>
+              <Button onClick={() => {
+                   handleViewDetails(product.id)
+              }
+               
+                
+                } className="bg-blue-500 w-32 hover:bg-blue-600 text-white">{islocations ? 'Editar' : 'Ver +'}</Button>
                {islocations && (
                  <Button  onClick={() => handleDeleteProduct(product.id)} className="bg-red-500 hover:bg-red-600 mx-3 2xl:mx-20 w-32 text-white">Eliminar </Button>  
                )}
@@ -60,6 +78,16 @@ export const ShowProducts:React.FC<ShowProductstype> = ({setCurrentPage, current
       <div className="flex justify-center gap-2 mt-4">
       <Pagination currentPage={currentPage}  setCurrentPage={setCurrentPage} totalPages={totalPages}/>
       </div>
+      <ModalPutProduct
+       editedProduct={editedProduct}
+        filterModal={filterModal}
+         isOpen={isOpen} 
+         setEditedProduct={setEditedProduct}
+         setIsOpen={setIsOpen}
+         setProductNotificacion={setProductNotificacion}
+          />
+      
+
     </>
   )
 }

@@ -2,13 +2,15 @@ import { Card } from "@/components";
 import { Header } from "@/components/layout/header";
 import { Button } from "@/components/ui/button";
 import { useProducts } from "@/hooks/useProducts";
-import {  useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import { useProductContext } from "@/contex/productContext";
 import { IoIosReturnLeft } from "react-icons/io";
 
 export  default function DetailProductsPages()  {
   const { id } = useParams();
+ 
+
   
  
   const numericId = id ? Number(id) : undefined;
