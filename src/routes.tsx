@@ -13,7 +13,7 @@ export default function AppRoutes() {
         <Route path="/" element={<Navigate to="/home" replace />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/home/:id" element={<DetailProductsPages />} />
-        <Route path="/home/buyProduc" element={<HomePage />} />
+        <Route path="/home/buyProducts" element={<HomePage />} />
       </Routes>
     </Suspense>
   );

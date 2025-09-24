@@ -16,10 +16,12 @@ const [currentPage, setCurrentPage] = useState (1)
 const { productNotificacion } = useProductContext();
 const { products } = useProducts();
 const location = useLocation()
-const islocations = location.pathname.includes('/home/buyProduc')
+const islocations = location.pathname.startsWith('/home/buyProducts')
 const productosLocations = islocations ? productNotificacion : products
 const title = islocations ? 'Productos agregados al carrito' : 'Nuestros productos'
  
+
+
 
 
 
@@ -30,7 +32,13 @@ const { currentProducts, totalPages, handleChange} = useBuyProducts( productosLo
       <Header />
       <h1 className="text-center text-lg md:text-2xl text-blue-500 pt-6">{title}</h1>
       <Search  handleChange={handleChange} />
-       <ShowProducts currentPage={currentPage} currentProducts={currentProducts} totalPages={totalPages} setCurrentPage={setCurrentPage} />
+       <ShowProducts 
+        islocations={islocations}
+         currentPage={currentPage} 
+        currentProducts={currentProducts} 
+        totalPages={totalPages}
+         setCurrentPage={setCurrentPage}
+          />
     </div>
   );
 }

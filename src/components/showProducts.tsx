@@ -4,6 +4,7 @@ import { Card } from './ui/card'
 import { Button } from './ui/button'
 import type { Product } from '@/api/products'
 import { useNavigate } from 'react-router-dom'
+import { useProductContext } from '@/contex/productContext'
 
 
 export interface ShowProductstype {
@@ -11,15 +12,22 @@ export interface ShowProductstype {
     currentProducts: Product[]
     currentPage:number
     totalPages:number
+    islocations:boolean
 
 
 }
 
-export const ShowProducts:React.FC<ShowProductstype> = ({setCurrentPage, currentProducts, currentPage, totalPages}) => {
+export const ShowProducts:React.FC<ShowProductstype> = ({setCurrentPage, currentProducts, currentPage, totalPages, islocations}) => {
       const navigate = useNavigate();
+      const {  setProductNotificacion} = useProductContext();
 
      const handleViewDetails = (id: number) => {
         navigate(`/home/${id}`);
+    }
+    const handleDeleteProduct = (id:number) => {
+    setProductNotificacion(prev => 
+        prev.filter(product => product.id !== id)
+    )
     }
 
   return (
@@ -39,8 +47,12 @@ export const ShowProducts:React.FC<ShowProductstype> = ({setCurrentPage, current
               <p className="text-gray-600 text-sm line-clamp-3">{product.category}</p>
               <p className="text-gray-800 font-bold">${product.price}</p>
             </div>
-            <div className="p-2 ">
-              <Button onClick={() => handleViewDetails(product.id)} className="bg-blue-300 w-32 text-white">Ver +</Button>
+            <div className="p-2  ">
+              <Button onClick={() => handleViewDetails(product.id)} className="bg-blue-500 w-32 hover:bg-blue-600 text-white">{islocations ? 'Editar' : 'Ver +'}</Button>
+               {islocations && (
+                 <Button  onClick={() => handleDeleteProduct(product.id)} className="bg-red-500 hover:bg-red-600 mx-3 2xl:mx-20 w-32 text-white">Eliminar </Button>  
+               )}
+               
             </div>
           </Card>
         ))}

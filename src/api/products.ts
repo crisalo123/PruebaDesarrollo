@@ -25,3 +25,13 @@ export const getProducts = async (id?: number): Promise<Product[]> => {
     return response.data;
   }
 };
+
+export const putProductos = async (id: number, data: Partial<Product>) => {
+  try {
+    const response = await axiosCustomer.put(`/products/${id}`, data);
+    return response.data;
+  } catch (error) {
+    console.error("Error al actualizar el producto:", error);
+    throw error;
+  }
+};
